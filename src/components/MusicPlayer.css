@@ -1,0 +1,79 @@
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(0deg, #fd297a, #9424f0);
+}
+.music-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #353535;
+  border-radius: 40px;
+}
+
+.img-container {
+}
+
+.img {
+  width: 400px;
+  border-radius: 40px;
+  object-fit: cover;
+}
+
+.controller-div {
+  width: 100%;
+}
+.controller {
+  width: 100%;
+  background-color: #ff3c83;
+  margin: 1rem;
+  border-radius: 4px;
+}
+/* #FF9F4A #FF3C83 */
+
+.controller-music {
+  /* width: inherit; */
+  /* border: 2px solid blue; */
+  width: 50%;
+  height: 10px;
+  border-radius: 4px;
+  background-color: #ff9f4a;
+  transition: width 0.2s linear;
+}
+
+.controller-music::before {
+  content: " ";
+  width: 4px;
+  height: 4px;
+  background-color: aqua;
+  border-radius: 50%;
+}
+
+.controller-time {
+  color: #fcfcfc;
+  font-weight: 600;
+  transform: translateX(20px) translateY(-10px);
+}
+
+input {
+  width: inherit;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  font-size: 2rem;
+  padding: 0.5rem;
+  color: #fcfcfc;
+  /* border-radius: 50%; */
+}
+
+.btn-large {
+  font-size: 3rem;
+  width: 4rem;
+}
