@@ -1,0 +1,13 @@
+.categories {
+    /* width:60%; */
+    border: 2px solid red;
+    background-color: #353535;
+    color: #fff;
+}
+
+h2 {
+    font-size: 3rem;
+    margin: 1rem 10rem;
+}
+
+

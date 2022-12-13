@@ -1,0 +1,23 @@
+
+.song{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #46B2E0;
+    border-radius: .5rem;
+    padding: 0 1.5rem;
+    font-size: 1.5rem;
+    margin: 1rem ;
+    /* width: 100%; */
+
+}
+
+.songName{
+    overflow-x: hidden;
+    width: 70%;
+    cursor: pointer;
+}
+
+.btn_add_queue{
+    cursor: pointer;
+}
