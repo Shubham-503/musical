@@ -106,6 +106,7 @@ const MusicPlayer = ({songsQueue}) => {
  }
 
   useEffect(() => {
+    if(songsQueue.length === 0) return;
     loadSong(songsQueue[songCount])
     if (isPlaying) {
       audioElement.current.play();
