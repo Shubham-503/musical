@@ -1,0 +1,51 @@
+.queue {
+    background-color: #EF5354;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border-radius: 1rem;
+    padding: .5rem 1rem;
+    /* width: 100%; */
+}
+
+.queueList{
+    transition: height 0.2s ease-out;
+}
+
+.queue >h3{
+    font-size: 2rem;
+    background-color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+}
+
+.songQueue{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #46B2E0;
+    border-radius: .5rem;
+    padding: 0 0.5rem;
+    font-size: 1.2rem;
+    margin: 1rem ;
+    color: #fff;
+    gap: 3rem;
+    /* width: 100%; */
+
+}
+
+.songName{
+    overflow-x: hidden;
+    width: 70%;
+    cursor: pointer;
+}
+
+.btn_del_queue{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.btn_del_queue >i{
+    font-size: .8rem;
+}
