@@ -30,7 +30,9 @@ const MusicPlayer = () => {
   const [songCount, setSongCount] = useState(0)
   const audio = document.querySelector('.audio')
   const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
+  const [currentTime, setCurrentTime] = useState("00:00")
+  const [songDuration, setSongDuration] = useState("00:00")
+  const [progressPrecent, setProgressPrecent] = useState(0)
   const audioElement = useRef(null);
 
 
@@ -69,13 +71,60 @@ const MusicPlayer = () => {
       setIsPlaying(true)
     } else {
       console.log("pauseAudio", audio);
-
-      audioElement.current.pause()
-      setIsPlaying(false)
+     setIsPlaying(false)
     }
     // console.log(audio.currentTime);
   }
 
+  function updateProgress() {
+    const currentTime = audioElement.current.currentTime;
+    //   console.log("update functon", audio);
+    const duration = audioElement.current.duration;
+    const pgPrecent = (currentTime / duration) * 100;
+    //   console.log(currentTime, duration);
+    //   convertSecToMin(sec)
+    setCurrentTime(convertSecToMin(audioElement.current.currentTime));
+    setSongDuration(convertSecToMin(audioElement.current.duration));
+    // MusicController.style.width = `${progressPrecent}%`;
+    setProgressPrecent((currentTime / duration) * 100)
+    if (audioElement.current.ended) nextAudio();
+  }
+  
+  function convertSecToMin(sec) {
+    const s = String(Math.floor(sec % 60)).padStart(2, "0");
+    const m = String(Math.floor(sec / 60)).padStart(2, "0");
+    return `${m}:${s}`;
+  }
+
+  function convertMintoSec(min) {
+    let [m,s] = min.split(":")
+    const time = Number(m)*60+Number(s)
+    return time
+  }
+  
+  const controlFromController = (e) => {
+    //   console.log("e.currentTarget.offsetWidth", e.currentTarget.offsetWidth);
+    //   console.log("e.currentTarget.offsetLeft", e.currentTarget.offsetLeft);
+    //   console.log("e.pageX", e.pageX);
+    // controller.addEventListener("mousemove1", controllerDragStart);
+  
+    const controllerPositionFromLeft = e.currentTarget.offsetLeft;
+    const controllerWidth = e.currentTarget.offsetWidth;
+    let controllerMouseClick = e.pageX;
+    let progPrecent =
+      ((controllerMouseClick - controllerPositionFromLeft) / controllerWidth) *
+      100;
+    // const duration = audioElement.current.duration;
+    // console.log(progressPrecent);
+    // MusicController.style.width = `${progressPrecent}%`;
+    setProgressPrecent(progPrecent)
+    let songCurrentTime = (progressPrecent * songDuration) / 100;
+    // console.log(songCurrentTime);
+    // console.log(songCurrentTime);
+    audioElement.current.currentTime = convertMintoSec(currentTime);
+    convertSecToMin(currentTime);
+  };
+  
   useEffect(() => {
     loadSong(songsQueue[songCount])
     if (isPlaying) {
@@ -92,18 +141,18 @@ const MusicPlayer = () => {
           <img className="img" src={imgSrc} alt="" />
         </div>
 
-        <audio className="audio" src={audioSrc} ref={audioElement}></audio>
+        <audio className="audio" src={audioSrc} ref={audioElement} onTimeUpdate={updateProgress} ></audio>
 
         <h1 className="title">{title}</h1>
         <div className="controller-div">
-          <div className="controller">
+          <div className="controller" onClick={controlFromController}>
             {/* <input type="range" value="30" className="controller-input" /> */}
-            <div className="controller-music"></div>
+            <div className="controller-music" style={{width:`${progressPrecent}%`}}></div>
           </div>
           <div className="controller-time">
-            <span className="currentTime"  >01:30 </span>
+            <span className="currentTime"  >{currentTime} </span>
             <span className="time-separator"> / </span>
-            <span className="songDuration">{audioElement.current.duration}</span>
+            <span className="songDuration">{songDuration}</span>
           </div>
         </div>
 
