@@ -3,7 +3,7 @@ import { v4 as uuidv4} from "uuid"
 import Song from './Song'
 import "./Categories.css"
 
-const Categories = () => {
+const Categories = ({addToQueue}) => {
   const [songs, setSongs] = useState([
     {
       title: "Song 1",
@@ -30,7 +30,7 @@ const Categories = () => {
     <div className='categories'>
       <h2>Songs</h2>
       {songs.map((song)=>{
-        return <Song song={song} key={uuidv4()} />
+        return <Song song={song} key={uuidv4()} addToQueue={addToQueue} />
       })}
       {/* <Song /> */}
     </div>

@@ -1,29 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import "./MusicPlayer.css"
 
-const MusicPlayer = () => {
-  const [songsQueue, setSongsQueue] = useState([
-    {
-      title: "Song 1",
-      songSrc: "./assets/musics/song1.mp3",
-      thumbnailSrc: "./assets/images/song1.png",
-    },
-    {
-      title: "Song 2",
-      songSrc: "./assets/musics/song2.mp3",
-      thumbnailSrc: "./assets/images/song2.png",
-    },
-    {
-      title: "Song 3",
-      songSrc: "./assets/musics/song3.mp3",
-      thumbnailSrc: "./assets/images/song3.png",
-    },
-    {
-      title: "Song 4",
-      songSrc: "./assets/musics/song4.mp3",
-      thumbnailSrc: "./assets/images/song4.png",
-    },
-  ])
+const MusicPlayer = ({songsQueue}) => {
+ 
   const [title, setTitle] = useState("")
   const [audioSrc, setAudioSrc] = useState("")
   const [imgSrc, setImgSrc] = useState("")

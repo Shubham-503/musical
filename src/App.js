@@ -27,11 +27,22 @@ function App() {
       thumbnailSrc: "./assets/images/song4.png",
     },
   ])
+
+  const addToQueue = (song) => {
+    setSongsQueue([...songsQueue,song])
+  }
+  
+  const deleteFromQueue = (title) => {
+    setSongsQueue(songsQueue.filter((song)=>{
+      return song.title !== title
+    }))
+  }
+
   return (
     <div className="app">
-      <Categories/>
-      <MusicPlayer/>
-      <Queue songsQueue={songsQueue}/>
+      <Categories addToQueue={addToQueue}  />
+      <MusicPlayer songsQueue={songsQueue}/>
+      <Queue songsQueue={songsQueue} deleteFromQueue={deleteFromQueue}/>
     </div>
   );
 }
