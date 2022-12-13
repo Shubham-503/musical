@@ -33,6 +33,7 @@ const MusicPlayer = () => {
   const [currentTime, setCurrentTime] = useState("00:00")
   const [songDuration, setSongDuration] = useState("00:00")
   const [progressPrecent, setProgressPrecent] = useState(0)
+  const [volumeInp, setVolumeInp] = useState(0.5)
   const audioElement = useRef(null);
 
 
@@ -49,7 +50,7 @@ const MusicPlayer = () => {
     loadSong(songsQueue[songCount])
     // setIsPlaying(false);
     // playAudio();
-    }
+  }
 
   const prevAudio = () => {
 
@@ -71,7 +72,7 @@ const MusicPlayer = () => {
       setIsPlaying(true)
     } else {
       console.log("pauseAudio", audio);
-     setIsPlaying(false)
+      setIsPlaying(false)
     }
     // console.log(audio.currentTime);
   }
@@ -89,7 +90,7 @@ const MusicPlayer = () => {
     setProgressPrecent((currentTime / duration) * 100)
     if (audioElement.current.ended) nextAudio();
   }
-  
+
   function convertSecToMin(sec) {
     const s = String(Math.floor(sec % 60)).padStart(2, "0");
     const m = String(Math.floor(sec / 60)).padStart(2, "0");
@@ -97,34 +98,34 @@ const MusicPlayer = () => {
   }
 
   function convertMintoSec(min) {
-    let [m,s] = min.split(":")
-    const time = Number(m)*60+Number(s)
+    let [m, s] = min.split(":")
+    const time = Number(m) * 60 + Number(s)
     return time
   }
-  
+
   const controlFromController = (e) => {
     //   console.log("e.currentTarget.offsetWidth", e.currentTarget.offsetWidth);
     //   console.log("e.currentTarget.offsetLeft", e.currentTarget.offsetLeft);
     //   console.log("e.pageX", e.pageX);
     // controller.addEventListener("mousemove1", controllerDragStart);
-  
+
     const controllerPositionFromLeft = e.currentTarget.offsetLeft;
     const controllerWidth = e.currentTarget.offsetWidth;
     let controllerMouseClick = e.pageX;
     let progPrecent =
       ((controllerMouseClick - controllerPositionFromLeft) / controllerWidth) *
       100;
-    // const duration = audioElement.current.duration;
-    // console.log(progressPrecent);
-    // MusicController.style.width = `${progressPrecent}%`;
+   
     setProgressPrecent(progPrecent)
-    let songCurrentTime = (progressPrecent * songDuration) / 100;
-    // console.log(songCurrentTime);
-    // console.log(songCurrentTime);
     audioElement.current.currentTime = convertMintoSec(currentTime);
     convertSecToMin(currentTime);
   };
-  
+
+ const handleVolInp = (e) => {
+  setVolumeInp(e.target.value)
+  audioElement.current.volume=e.target.value
+ }
+
   useEffect(() => {
     loadSong(songsQueue[songCount])
     if (isPlaying) {
@@ -147,7 +148,7 @@ const MusicPlayer = () => {
         <div className="controller-div">
           <div className="controller" onClick={controlFromController}>
             {/* <input type="range" value="30" className="controller-input" /> */}
-            <div className="controller-music" style={{width:`${progressPrecent}%`}}></div>
+            <div className="controller-music" style={{ width: `${progressPrecent}%` }}></div>
           </div>
           <div className="controller-time">
             <span className="currentTime"  >{currentTime} </span>
@@ -157,17 +158,29 @@ const MusicPlayer = () => {
         </div>
 
         <div className="functions">
-          <button className="btn-prev" onClick={() => prevAudio()}>
-            <i className="fa-solid fa-backward-step"></i>
-          </button>
+          <div className="btn-controls">
+            <button className="btn-prev" onClick={() => prevAudio()}>
+              <i className="fa-solid fa-backward-step"></i>
+            </button>
 
-          <button className="btn-play btn-large" onClick={() => playAudio()}>
-            <i className={`fa-solid  ${isPlaying ? "fa-pause" : "fa-play"}`}></i>
-          </button>
+            <button className="btn-play btn-large" onClick={() => playAudio()}>
+              <i className={`fa-solid  ${isPlaying ? "fa-pause" : "fa-play"}`}></i>
+            </button>
 
-          <button className="btn-next" onClick={() => nextAudio()}>
-            <i className="fa-solid fa-forward-step"></i>
-          </button>
+            <button className="btn-next" onClick={() => nextAudio()}>
+              <i className="fa-solid fa-forward-step"></i>
+            </button>
+          </div>
+          <div className="volume-control">
+            <button className="btn-control btn-volume">
+              <i className="fa-solid fa-volume-high"></i>
+            </button>
+
+            <div className="volume-progress">
+              <input type="range" min="0" max="1"  step=".1" name="volume-progress-range"
+                id="volume-progress-range" className="volume-progress-range" value={volumeInp} onInput={(e)=>{handleVolInp(e)}}/>
+            </div>
+          </div>
         </div>
       </div>
     </>

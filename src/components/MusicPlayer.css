@@ -77,3 +77,30 @@ button {
   font-size: 3rem;
   width: 4rem;
 }
+
+.functions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.volume-progress-range {
+  width: 80px;
+  /* -webkit-appearance: slider-vertical */
+}
+.volume-control {
+  display: flex;
+  align-items: center;
+}
+
+.volume-progress {
+  display: none;
+  /* transition: all .2s linear; */
+}
+
+
+.volume-control:hover .volume-progress {
+  display: flex;
+  align-items: center;
+}
