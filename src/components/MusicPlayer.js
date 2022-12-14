@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import "./MusicPlayer.css"
 
-const MusicPlayer = ({songsQueue}) => {
- 
+const MusicPlayer = ({ songsQueue }) => {
+
   const [title, setTitle] = useState("")
   const [audioSrc, setAudioSrc] = useState("")
   const [imgSrc, setImgSrc] = useState("")
@@ -13,6 +13,8 @@ const MusicPlayer = ({songsQueue}) => {
   const [songDuration, setSongDuration] = useState("00:00")
   const [progressPrecent, setProgressPrecent] = useState(0)
   const [volumeInp, setVolumeInp] = useState(0.5)
+  const [isShuffle, setIsShuffle] = useState(false)
+  const [isRepeat, setIsRepeat] = useState(false)
   const audioElement = useRef(null);
 
 
@@ -24,6 +26,23 @@ const MusicPlayer = ({songsQueue}) => {
   }
 
   const nextAudio = async () => {
+
+    if(isShuffle) {
+      let rand;
+        while(true){
+         rand = Math.floor(Math.random()*songsQueue.length)
+         console.log('rand: ',rand);
+         console.log('videoCount: ',songCount);
+        if (rand === songCount) {
+            // rand=videoCount;
+            continue;
+        };
+        if (rand !== songCount) break;
+        }
+        setSongCount(rand)
+        return;
+    }
+
     // audioElement.current.pause()
     setSongCount((songCount + 1) % songsQueue.length);
     loadSong(songsQueue[songCount])
@@ -94,19 +113,46 @@ const MusicPlayer = ({songsQueue}) => {
     let progPrecent =
       ((controllerMouseClick - controllerPositionFromLeft) / controllerWidth) *
       100;
-   
+
     setProgressPrecent(progPrecent)
     audioElement.current.currentTime = convertMintoSec(currentTime);
     convertSecToMin(currentTime);
   };
 
- const handleVolInp = (e) => {
-  setVolumeInp(e.target.value)
-  audioElement.current.volume=e.target.value
- }
+  const handleVolInp = (e) => {
+    setVolumeInp(e.target.value)
+    audioElement.current.volume = e.target.value
+  }
+
+  const loopSong = () => {
+    console.log(('loopSong Clicked'))
+    console.log(audioElement.current.loop)
+    if (!audioElement.current.loop) {
+      audioElement.current.loop = true;
+      // loopBtn.querySelector('i').style.color = "red"
+    }
+    else {
+      audioElement.current.loop = false;
+      // loopBtn.querySelector('i').style.color = "white"
+
+    }
+    setIsRepeat(!isRepeat)
+  }
+
+  const shuffleSong = () => {
+    setIsShuffle(!isShuffle)
+    if (!isShuffle) {
+      setIsShuffle(true)
+    }
+    else {
+      setIsShuffle(false)
+
+
+    }
+  }
 
   useEffect(() => {
-    if(songsQueue.length === 0) return;
+    if (songsQueue.length === 0) return ;
     loadSong(songsQueue[songCount])
     if (isPlaying) {
       audioElement.current.play();
@@ -138,6 +184,16 @@ const MusicPlayer = ({songsQueue}) => {
         </div>
 
         <div className="functions">
+          <div className="volume-control">
+            <button className="btn-control btn-volume">
+              <i className="fa-solid fa-volume-high"></i>
+            </button>
+
+            <div className="volume-progress">
+              <input type="range" min="0" max="1" step=".1" name="volume-progress-range"
+                id="volume-progress-range" className="volume-progress-range" value={volumeInp} onInput={(e) => { handleVolInp(e) }} style={{background:`linear-gradient(to right, #fd297a 0%, #fd297a ${volumeInp*100}%, #9424f0  ${volumeInp*100}%, #9424f0 100%)`}} />
+            </div>
+          </div>
           <div className="btn-controls">
             <button className="btn-prev" onClick={() => prevAudio()}>
               <i className="fa-solid fa-backward-step"></i>
@@ -151,16 +207,16 @@ const MusicPlayer = ({songsQueue}) => {
               <i className="fa-solid fa-forward-step"></i>
             </button>
           </div>
-          <div className="volume-control">
-            <button className="btn-control btn-volume">
-              <i className="fa-solid fa-volume-high"></i>
-            </button>
+          <div className="functions-controls">
+          <button className="btn-control btn-repeat" onClick={()=>loopSong()} style={{color: `${isRepeat?"red":"white"}`}}>
+            <i className="fa-solid fa-repeat" ></i>
+          </button>
 
-            <div className="volume-progress">
-              <input type="range" min="0" max="1"  step=".1" name="volume-progress-range"
-                id="volume-progress-range" className="volume-progress-range" value={volumeInp} onInput={(e)=>{handleVolInp(e)}}/>
-            </div>
+          <button className="btn-control btn-shuffle" onClick={shuffleSong} style={{color: `${isShuffle?"red":"white"}`}} >
+            <i className="fa-solid fa-shuffle"></i>
+          </button>
           </div>
+
         </div>
       </div>
     </>

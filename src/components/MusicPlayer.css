@@ -104,3 +104,23 @@ button {
   display: flex;
   align-items: center;
 }
+
+#volume-progress-range{
+  -webkit-appearance: none;
+  height: 4px;
+  /* border-radius: 5px; */
+  outline: none;
+  /* color: red; */
+  /* background-color: red; */
+  background: linear-gradient(to right, #fd297a 0%, #fd297a 50%, #9424f0 50%, #9424f0 100%);
+  /* border: 2px solid violet; */   
+}
+
+#volume-progress-range::-webkit-slider-thumb{
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%; 
+  background: #fd297a;
+  cursor: pointer;   
+}
