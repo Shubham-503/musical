@@ -10,11 +10,12 @@ const MusicPlayer = ({ songsQueue }) => {
   const audio = document.querySelector('.audio')
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState("00:00")
-  const [songDuration, setSongDuration] = useState("00:00")
+  const [songDuration, setSongDuration] = useState(0)
   const [progressPrecent, setProgressPrecent] = useState(0)
   const [volumeInp, setVolumeInp] = useState(0.5)
   const [isShuffle, setIsShuffle] = useState(false)
   const [isRepeat, setIsRepeat] = useState(false)
+  const [songProgress, setSongProgress] = useState(0)
   const audioElement = useRef(null);
 
 
@@ -48,6 +49,8 @@ const MusicPlayer = ({ songsQueue }) => {
     loadSong(songsQueue[songCount])
     // setIsPlaying(false);
     // playAudio();
+    setSongProgress(0)
+
   }
 
   const prevAudio = () => {
@@ -61,6 +64,7 @@ const MusicPlayer = ({ songsQueue }) => {
     loadSong(songsQueue[songCount])
     // setIsPlaying(false);
     // playAudio();
+    setSongProgress(0)
   }
 
   const playAudio = () => {
@@ -124,6 +128,11 @@ const MusicPlayer = ({ songsQueue }) => {
     audioElement.current.volume = e.target.value
   }
 
+  const handleSongDurationInput = (e)=> {
+    setSongProgress(e.target.value)
+    audioElement.current.currentTime = e.target.value
+  }
+
   const loopSong = () => {
     console.log(('loopSong Clicked'))
     console.log(audioElement.current.loop)
@@ -173,8 +182,8 @@ const MusicPlayer = ({ songsQueue }) => {
         <h1 className="title">{title}</h1>
         <div className="controller-div">
           <div className="controller" onClick={controlFromController}>
-            {/* <input type="range" value="30" className="controller-input" /> */}
-            <div className="controller-music" style={{ width: `${progressPrecent}%` }}></div>
+            <input type="range" min="0" max="100"  id='player-current-progress' value={songProgress} onInput={(e)=>{handleSongDurationInput(e)}}  style={{background:`linear-gradient(to right, #fd297a 0%, #fd297a ${songProgress}%, #9424f0  ${songProgress}%, #9424f0 100%)`}}/>
+            {/* <div className="controller-music" style={{ width: `${progressPrecent}%` }}></div> */}
           </div>
           <div className="controller-time">
             <span className="currentTime"  >{currentTime} </span>
@@ -208,11 +217,11 @@ const MusicPlayer = ({ songsQueue }) => {
             </button>
           </div>
           <div className="functions-controls">
-          <button className="btn-control btn-repeat" onClick={()=>loopSong()} style={{color: `${isRepeat?"red":"white"}`}}>
+          <button className="btn-control btn-repeat" onClick={()=>loopSong()} style={{color: `${isRepeat?"#fd297a":"white"}`}}>
             <i className="fa-solid fa-repeat" ></i>
           </button>
 
-          <button className="btn-control btn-shuffle" onClick={shuffleSong} style={{color: `${isShuffle?"red":"white"}`}} >
+          <button className="btn-control btn-shuffle" onClick={shuffleSong} style={{color: `${isShuffle?"#fd297a":"white"}`}} >
             <i className="fa-solid fa-shuffle"></i>
           </button>
           </div>

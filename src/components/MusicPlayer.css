@@ -30,7 +30,7 @@ body {
 }
 .controller {
   width: 100%;
-  background-color: #ff3c83;
+  /* background-color: #ff3c83; */
   margin: 1rem;
   border-radius: 4px;
 }
@@ -92,11 +92,20 @@ button {
 .volume-control {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .volume-progress {
   display: none;
-  /* transition: all .2s linear; */
+    position: absolute;
+    top: -100%;
+    right: -50%;
+    transform: rotate(270deg);
+    background-color: #46B2E0;
+    border-radius: 10px;
+    /* border: 2px solid red; */
+    padding: 0.7rem;
+    /* transition: all .2s linear;*/
 }
 
 
@@ -123,4 +132,26 @@ button {
   border-radius: 50%; 
   background: #fd297a;
   cursor: pointer;   
+}
+
+
+#player-current-progress {
+  -webkit-appearance: none;
+  height: 6px;
+  /* border-radius: 5px; */
+  outline: none;
+  /* color: red; */
+  /* background-color: red; */
+  background: linear-gradient(to right, #fd297a 0%, #fd297a 50%, #9424f0 50%, #9424f0 100%);
+  /* border: 2px solid violet; */
+}
+
+#player-current-progress::-webkit-slider-thumb {
+  /* -webkit-appearance: none; */
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%; 
+  background: #fd297a;
+  cursor: pointer;
 }
