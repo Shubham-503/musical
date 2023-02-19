@@ -13,7 +13,7 @@ const Queue = ({ songsQueue, deleteFromQueue }) => {
           ref={provided.innerRef}
           {...provided.droppableProps}
         >
-          <h3
+          <h3 
             onClick={() => {
               setIsActive(!isActive);
             }}

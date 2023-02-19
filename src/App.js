@@ -55,7 +55,7 @@ function App() {
     songs.splice(result.draggableId-1,1)
     console.log(songs);
     songs.splice(destination.index-1,0,add)
-    setSongsQueue(songs)
+    setSongsQueue(songs) 
 
   }
 
