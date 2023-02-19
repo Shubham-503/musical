@@ -1,10 +1,11 @@
 .queue {
     background-color: #EF5354;
     position: fixed;
-    bottom: 0;
+    bottom: 50px;
     right: 0;
     border-radius: 1rem;
     padding: .5rem 1rem;
+    /* height:125% */
     /* width: 100%; */
 }
 

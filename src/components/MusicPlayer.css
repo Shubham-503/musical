@@ -115,7 +115,7 @@ button {
 }
 
 #volume-progress-range{
-  -webkit-appearance: none;
+ appearance: none;
   height: 4px;
   /* border-radius: 5px; */
   outline: none;
@@ -136,7 +136,7 @@ button {
 
 
 #player-current-progress {
-  -webkit-appearance: none;
+  appearance: none;
   height: 6px;
   /* border-radius: 5px; */
   outline: none;

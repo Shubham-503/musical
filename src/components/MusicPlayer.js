@@ -10,7 +10,7 @@ const MusicPlayer = ({ songsQueue }) => {
   const audio = document.querySelector('.audio')
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState("00:00")
-  const [songDuration, setSongDuration] = useState(0)
+  const [songDuration, setSongDuration] = useState()
   const [progressPrecent, setProgressPrecent] = useState(0)
   const [volumeInp, setVolumeInp] = useState(0.5)
   const [isShuffle, setIsShuffle] = useState(false)
@@ -28,29 +28,23 @@ const MusicPlayer = ({ songsQueue }) => {
 
   const nextAudio = async () => {
 
-    if(isShuffle) {
+    if (isShuffle) {
       let rand;
-        while(true){
-         rand = Math.floor(Math.random()*songsQueue.length)
-         console.log('rand: ',rand);
-         console.log('videoCount: ',songCount);
+      while (true) {
+        rand = Math.floor(Math.random() * songsQueue.length)
+        console.log('rand: ', rand);
+        console.log('videoCount: ', songCount);
         if (rand === songCount) {
-            // rand=videoCount;
-            continue;
+          continue;
         };
         if (rand !== songCount) break;
-        }
-        setSongCount(rand)
-        return;
+      }
+      setSongCount(rand)
+      return;
     }
-
-    // audioElement.current.pause()
     setSongCount((songCount + 1) % songsQueue.length);
     loadSong(songsQueue[songCount])
-    // setIsPlaying(false);
-    // playAudio();
     setSongProgress(0)
-
   }
 
   const prevAudio = () => {
@@ -62,8 +56,6 @@ const MusicPlayer = ({ songsQueue }) => {
     }
     console.log(songCount);
     loadSong(songsQueue[songCount])
-    // setIsPlaying(false);
-    // playAudio();
     setSongProgress(0)
   }
 
@@ -76,19 +68,15 @@ const MusicPlayer = ({ songsQueue }) => {
       console.log("pauseAudio", audio);
       setIsPlaying(false)
     }
-    // console.log(audio.currentTime);
   }
 
   function updateProgress() {
     const currentTime = audioElement.current.currentTime;
-    //   console.log("update functon", audio);
     const duration = audioElement.current.duration;
     const pgPrecent = (currentTime / duration) * 100;
-    //   console.log(currentTime, duration);
-    //   convertSecToMin(sec)
     setCurrentTime(convertSecToMin(audioElement.current.currentTime));
     setSongDuration(convertSecToMin(audioElement.current.duration));
-    // MusicController.style.width = `${progressPrecent}%`;
+    setSongProgress((currentTime / duration) * 100)
     setProgressPrecent((currentTime / duration) * 100)
     if (audioElement.current.ended) nextAudio();
   }
@@ -98,39 +86,17 @@ const MusicPlayer = ({ songsQueue }) => {
     const m = String(Math.floor(sec / 60)).padStart(2, "0");
     return `${m}:${s}`;
   }
-
-  function convertMintoSec(min) {
-    let [m, s] = min.split(":")
-    const time = Number(m) * 60 + Number(s)
-    return time
-  }
-
-  const controlFromController = (e) => {
-    //   console.log("e.currentTarget.offsetWidth", e.currentTarget.offsetWidth);
-    //   console.log("e.currentTarget.offsetLeft", e.currentTarget.offsetLeft);
-    //   console.log("e.pageX", e.pageX);
-    // controller.addEventListener("mousemove1", controllerDragStart);
-
-    const controllerPositionFromLeft = e.currentTarget.offsetLeft;
-    const controllerWidth = e.currentTarget.offsetWidth;
-    let controllerMouseClick = e.pageX;
-    let progPrecent =
-      ((controllerMouseClick - controllerPositionFromLeft) / controllerWidth) *
-      100;
-
-    setProgressPrecent(progPrecent)
-    audioElement.current.currentTime = convertMintoSec(currentTime);
-    convertSecToMin(currentTime);
-  };
-
+ 
   const handleVolInp = (e) => {
     setVolumeInp(e.target.value)
     audioElement.current.volume = e.target.value
   }
 
-  const handleSongDurationInput = (e)=> {
+  const handleSongDurationInput = (e) => {
+    console.log(e.target.value);
     setSongProgress(e.target.value)
-    audioElement.current.currentTime = e.target.value
+    // audioElement.current.currentTime = e.target.value  
+    audioElement.current.currentTime = ((Number(e.target.value) * Number(audioElement.current.duration)) / 100)
   }
 
   const loopSong = () => {
@@ -155,13 +121,11 @@ const MusicPlayer = ({ songsQueue }) => {
     }
     else {
       setIsShuffle(false)
-
-
     }
   }
 
   useEffect(() => {
-    if (songsQueue.length === 0) return ;
+    if (songsQueue.length === 0) return;
     loadSong(songsQueue[songCount])
     if (isPlaying) {
       audioElement.current.play();
@@ -181,8 +145,8 @@ const MusicPlayer = ({ songsQueue }) => {
 
         <h1 className="title">{title}</h1>
         <div className="controller-div">
-          <div className="controller" onClick={controlFromController}>
-            <input type="range" min="0" max="100"  id='player-current-progress' value={songProgress} onInput={(e)=>{handleSongDurationInput(e)}}  style={{background:`linear-gradient(to right, #fd297a 0%, #fd297a ${songProgress}%, #9424f0  ${songProgress}%, #9424f0 100%)`}}/>
+          <div className="controller" >
+            <input type="range" min="0" max="100" id='player-current-progress'  value={songProgress} onInput={(e) => { handleSongDurationInput(e) }} style={{ background: `linear-gradient(to right, #fd297a 0%, #fd297a ${songProgress}%, #9424f0  ${songProgress}%, #9424f0 100%)` }} />
             {/* <div className="controller-music" style={{ width: `${progressPrecent}%` }}></div> */}
           </div>
           <div className="controller-time">
@@ -198,9 +162,9 @@ const MusicPlayer = ({ songsQueue }) => {
               <i className="fa-solid fa-volume-high"></i>
             </button>
 
-            <div className="volume-progress">
-              <input type="range" min="0" max="1" step=".1" name="volume-progress-range"
-                id="volume-progress-range" className="volume-progress-range" value={volumeInp} onInput={(e) => { handleVolInp(e) }} style={{background:`linear-gradient(to right, #fd297a 0%, #fd297a ${volumeInp*100}%, #9424f0  ${volumeInp*100}%, #9424f0 100%)`}} />
+            <div className="volume-progress" >
+              <input type="range" min="0" max="1" step=".1" name="volume-progress-range" 
+                id="volume-progress-range" className="volume-progress-range" value={volumeInp} onInput={(e) => { handleVolInp(e) }} style={{ background: `linear-gradient(to right, #fd297a 0%, #fd297a ${volumeInp * 100}%, #9424f0  ${volumeInp * 100}%, #9424f0 100%)` }} />
             </div>
           </div>
           <div className="btn-controls">
@@ -217,13 +181,13 @@ const MusicPlayer = ({ songsQueue }) => {
             </button>
           </div>
           <div className="functions-controls">
-          <button className="btn-control btn-repeat" onClick={()=>loopSong()} style={{color: `${isRepeat?"#fd297a":"white"}`}}>
-            <i className="fa-solid fa-repeat" ></i>
-          </button>
+            <button className="btn-control btn-repeat" onClick={() => loopSong()} style={{ color: `${isRepeat ? "#fd297a" : "white"}` }}>
+              <i className="fa-solid fa-repeat" ></i>
+            </button>
 
-          <button className="btn-control btn-shuffle" onClick={shuffleSong} style={{color: `${isShuffle?"#fd297a":"white"}`}} >
-            <i className="fa-solid fa-shuffle"></i>
-          </button>
+            <button className="btn-control btn-shuffle" onClick={shuffleSong} style={{ color: `${isShuffle ? "#fd297a" : "white"}` }} >
+              <i className="fa-solid fa-shuffle"></i>
+            </button>
           </div>
 
         </div>
